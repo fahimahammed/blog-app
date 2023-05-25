@@ -5,6 +5,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { typeDefs } from './schema.js';
 
 interface MyContext {
     token?: string;
@@ -14,16 +15,7 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
-const typeDefs = `#graphql
 
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`;
 const books = [
     {
         title: 'The Awakening',
