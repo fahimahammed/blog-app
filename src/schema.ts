@@ -6,10 +6,12 @@ export const typeDefs = `#graphql
   }
   type Query {
     books: [Book]
+    posts: [Post!]!
   }
 
   type Mutation {
-    postCreate(title: String!, content: String!): PostPayload!
+    postCreate(post: PostInput): PostPayload!
+    postUpdate(postId: ID!, post: PostInput): PostPayload!
   }
 
   type Post {
@@ -42,5 +44,10 @@ export const typeDefs = `#graphql
   type PostPayload {
     userErrors: [UserError!]!
     post: Post
+  }
+
+  input PostInput {
+    title: String
+    content: String
   }
 `;

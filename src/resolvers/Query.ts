@@ -1,7 +1,13 @@
+import {prisma} from '../index.js';
 export const Query = {
-    books: () => [
-        {
-            title: 'The Awakening',
-            author: 'Kate Chopin',
-        } ]
+    posts: async () =>{
+        const posts = await prisma.post.findMany({
+            orderBy: [
+                {
+                    createdAt: 'desc'
+                }
+            ]
+        })
+        return posts;
+    }
 }
