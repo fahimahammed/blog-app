@@ -8,6 +8,10 @@ export const typeDefs = `#graphql
     books: [Book]
   }
 
+  type Mutation {
+    postCreate(title: String!, content: String!): PostPayload!
+  }
+
   type Post {
     id: ID!
     title: String!
@@ -17,12 +21,26 @@ export const typeDefs = `#graphql
     user: User!
   }
 
-  type {
-    User
-    [Post]
+  type User{
+    id: ID!
+    name: String!
+    email: String!
+    profile: Profile!
+    posts: [Post!]!
   }
 
   type Profile {
-    User
+    id: ID!
+    bio: String!
+    user: User!
+  }
+
+  type UserError {
+    message: String!
+  }
+
+  type PostPayload {
+    userErrors: [UserError!]!
+    post: Post
   }
 `;

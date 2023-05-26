@@ -6,35 +6,26 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { typeDefs } from './schema.js';
+import { Query } from './resolvers/Query.js';
+import { Mutation } from './resolvers/Mutation.js';
+import { PrismaClient, Prisma } from "@prisma/client"
 
 interface MyContext {
     token?: string;
+    //prisma: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation>;
 }
 
 const app = express();
-
 const httpServer = http.createServer(app);
 
+export const prisma = new PrismaClient();
 
-const books = [
-    {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-    },
-    {
-        title: 'City of Glass',
-        author: 'Paul Auster',
-    },
-];
-
-const resolvers = {
-    Query: {
-        books: () => books,
-    },
-};
 const server = new ApolloServer<MyContext>({
     typeDefs,
-    resolvers,
+    resolvers:{
+        Query,
+        Mutation
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
@@ -45,7 +36,9 @@ app.use(
     cors<cors.CorsRequest>(),
     bodyParser.json(),
     expressMiddleware(server, {
-        context: async ({ req }) => ({ token: req.headers.token }),
+        context: async ({ req }) => ({ 
+            token: req.headers.token
+         }),
     }),
 );
 
